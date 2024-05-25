@@ -8,7 +8,7 @@ pygame.init()
 # Configuración de la pantalla
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Car Park Puzzle")
-
+#Hola buenas
 # Colores
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)

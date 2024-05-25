@@ -37,7 +37,6 @@ green_cars = [
     Car(GREEN, 120, 60, 300, 500),
     Car(GREEN, 60, 120, 350, 300),
     Car(GREEN, 60, 120, 500, 250),
-
 ]
 
 # Crear la salida
@@ -49,7 +48,6 @@ all_sprites.add(red_car)
 all_sprites.add(*green_cars)
 
 # Bucle principal
-#hay que hacer que los verdes se muevan correctamente
 running = True
 while running:
     for event in pygame.event.get():
@@ -59,13 +57,23 @@ while running:
             if event.button == 1:
                 for car in green_cars:
                     if car.rect.collidepoint(event.pos):
-                        x_change = event.pos[0] - car.rect.centerx
-                        y_change = event.pos[1] - car.rect.centery
-                        if 0 <= car.rect.x + x_change <= 800 - car.rect.width\
-                            and 0 <= car.rect.y + y_change <= 600 - car.rect.height\
-                            and not any(car.rect.colliderect(other_car.rect) for other_car in green_cars if other_car != car):
-                            car.move(x_change, y_change)
+                        # Verificar si se debe mover hacia adelante o hacia atrás
+                        if event.pos[0] > car.rect.centerx:
+                            x_change = 1
+                        else:
+                            x_change = -1
+                        # Mover el carro hasta que colisione con algo
+                        while (0 <= car.rect.x + x_change <= 800 - car.rect.width and
+                               not any(car.rect.colliderect(other_car.rect) for other_car in all_sprites if other_car != car) and
+                               not car.rect.colliderect(red_car.rect)):
+                            car.move(x_change, 0)
 
+                        # Si colisiona, invertir la dirección
+                        if car.rect.colliderect(red_car.rect):
+                            x_change *= -1
+                            while (0 <= car.rect.x + x_change <= 800 - car.rect.width and
+                                   not any(car.rect.colliderect(other_car.rect) for other_car in all_sprites if other_car != car)):
+                                car.move(x_change, 0)
 
     # Movimiento del auto rojo
     keys = pygame.key.get_pressed()

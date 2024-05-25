@@ -1,6 +1,6 @@
 import pygame
 import sys
-from PIL import Image
+from pygame.locals import *
 
 # Inicializar Pygame
 pygame.init()
@@ -8,12 +8,13 @@ pygame.init()
 # Configuración de la pantalla
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Car Park Puzzle")
-#Hola buenas
+
 # Colores
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
+GRAY = (128, 128, 128)
 
 # Clase para los autos
 class Car(pygame.sprite.Sprite):
@@ -37,42 +38,83 @@ green_cars = [
     Car(GREEN, 120, 60, 300, 500),
     Car(GREEN, 60, 120, 350, 300),
     Car(GREEN, 60, 120, 500, 250),
-
 ]
 
 # Crear la salida
 exit_rect = pygame.Rect(740, 300, 65, 60)
+
+# Definir las paredes
+walls = [
+    pygame.Rect(50, 50, 700, 10),  # Pared superior
+    pygame.Rect(50, 50, 10, 500),  # Pared izquierda
+    pygame.Rect(50, 540, 700, 10), # Pared inferior
+    pygame.Rect(740, 50, 10, 250), # Pared derecha superior
+    pygame.Rect(740, 360, 10, 190) # Pared derecha inferior
+]
 
 # Grupo de sprites
 all_sprites = pygame.sprite.Group()
 all_sprites.add(red_car)
 all_sprites.add(*green_cars)
 
+# Función para verificar colisiones
+def check_collisions(car, other_cars, walls):
+    for other_car in other_cars:
+        if car.rect.colliderect(other_car.rect):
+            return True
+    for wall in walls:
+        if car.rect.colliderect(wall):
+            return True
+    return False
+
 # Bucle principal
 running = True
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             running = False
+        elif event.type == MOUSEBUTTONDOWN:
+            if event.button == 1:
+                for car in green_cars:
+                    if car.rect.collidepoint(event.pos):
+                        # Verificar si se debe mover hacia adelante o hacia atrás
+                        if event.pos[0] > car.rect.centerx:
+                            x_change = 1
+                        else:
+                            x_change = -1
+                        # Mover el carro hasta que colisione con algo
+                        while (0 <= car.rect.x + x_change <= 800 - car.rect.width and
+                               not any(car.rect.colliderect(other_car.rect) for other_car in all_sprites if other_car != car) and
+                               not car.rect.colliderect(red_car.rect) and
+                               not any(car.rect.colliderect(wall) for wall in walls)):
+                            car.move(x_change, 0)
+
+                        # Si colisiona, invertir la dirección
+                        if car.rect.colliderect(red_car.rect):
+                            x_change *= -1
+                            while (0 <= car.rect.x + x_change <= 800 - car.rect.width and
+                                   not any(car.rect.colliderect(other_car.rect) for other_car in all_sprites if other_car != car) and
+                                   not any(car.rect.colliderect(wall) for wall in walls)):
+                                car.move(x_change, 0)
 
     # Movimiento del auto rojo
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        red_car.rect.x -= 1
-        if pygame.sprite.spritecollideany(red_car, green_cars):
-            red_car.rect.x += 1
-    if keys[pygame.K_RIGHT]:
-        red_car.rect.x += 1
-        if pygame.sprite.spritecollideany(red_car, green_cars):
-            red_car.rect.x -= 1
-    if keys[pygame.K_UP]:
-        red_car.rect.y -= 1
-        if pygame.sprite.spritecollideany(red_car, green_cars):
-            red_car.rect.y += 1
-    if keys[pygame.K_DOWN]:
-        red_car.rect.y += 1
-        if pygame.sprite.spritecollideany(red_car, green_cars):
-            red_car.rect.y -= 1
+    if keys[K_LEFT]:
+        red_car.move(-1, 0)
+        if check_collisions(red_car, green_cars, walls):
+            red_car.move(1, 0)
+    if keys[K_RIGHT]:
+        red_car.move(1, 0)
+        if check_collisions(red_car, green_cars, walls):
+            red_car.move(-1, 0)
+    if keys[K_UP]:
+        red_car.move(0, -1)
+        if check_collisions(red_car, green_cars, walls):
+            red_car.move(0, 1)
+    if keys[K_DOWN]:
+        red_car.move(0, 1)
+        if check_collisions(red_car, green_cars, walls):
+            red_car.move(0, -1)
 
     # Comprobar si el carro rojo está en la salida
     if red_car.rect.colliderect(exit_rect):
@@ -92,6 +134,8 @@ while running:
     # Dibujar todo
     screen.fill(BLACK)
     pygame.draw.rect(screen, WHITE, exit_rect)  # Dibujar la salida
+    for wall in walls:
+        pygame.draw.rect(screen, GRAY, wall)  # Dibujar las paredes
     all_sprites.draw(screen)
     pygame.display.flip()
 

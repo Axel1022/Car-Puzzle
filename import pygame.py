@@ -49,6 +49,7 @@ all_sprites.add(red_car)
 all_sprites.add(*green_cars)
 
 # Bucle principal
+#hay que hacer que los verdes se muevan correctamente
 running = True
 while running:
     for event in pygame.event.get():

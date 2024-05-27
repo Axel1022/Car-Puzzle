@@ -1,5 +1,6 @@
 import pygame
 import sys
+from music import MusicPlayer  # Asegúrate de que el archivo se llame `music_player.py`
 
 # Inicializar Pygame
 pygame.init()
@@ -13,9 +14,12 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
-YELLOW = (255, 255, 0)  # Color para el borde del auto seleccionado
+YELLOW = (255, 255, 0)  # Color para el borde del carro seleccionado
 
-# Clase para los autos
+# Inicializar el reproductor de música
+music_player = MusicPlayer()
+
+# Clase para los carros
 class Car(pygame.sprite.Sprite):
     def __init__(self, color, width, height, x, y, direction):
         super().__init__()
@@ -30,7 +34,7 @@ class Car(pygame.sprite.Sprite):
         self.rect.x += x_change
         self.rect.y += y_change
 
-# Crear autos
+# Crear carros
 red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
 green_cars = [
     Car(GREEN, 60, 120, 100, 100, 'vertical'),
@@ -48,8 +52,9 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(red_car)
 all_sprites.add(*green_cars)
 
-# Auto seleccionado
+# carro seleccionado
 selected_car = red_car
+
 
 # Bucle principal
 running = True
@@ -58,15 +63,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Seleccionar un auto
+            # Seleccionar un carro
             pos = pygame.mouse.get_pos()
             for car in all_sprites:
                 if car.rect.collidepoint(pos):
                     selected_car = car
                     break
 
-    # Movimiento del auto seleccionado
+    # Movimiento del carro seleccionado y volumen
     keys = pygame.key.get_pressed()
+    if keys[pygame.K_KP2]: #Bajar volumen
+        music_player.vol_Down()
+    if keys[pygame.K_KP8]: #Subir volumen
+        music_player.vol_Up()
+    if keys[pygame.K_KP5]: #Mutear y desmutear volumen
+        music_player.muteORdemue()
+
     if selected_car:
         x_change = 0
         y_change = 0
@@ -81,7 +93,7 @@ while running:
             if keys[pygame.K_DOWN]:
                 y_change = 1
 
-        # Mover el auto y verificar colisiones
+        # Mover el carro y verificar colisiones
         if x_change != 0 or y_change != 0:
             selected_car.move(x_change, y_change)
             collision = pygame.sprite.spritecollideany(selected_car, all_sprites, collided=lambda x, y: x != y and pygame.sprite.collide_rect(x, y))
@@ -93,7 +105,7 @@ while running:
         print("¡Has llegado a la salida!")
         running = False
 
-    # Asegurar que los autos no salgan de la pantalla
+    # Asegurar que los carros no salgan de la pantalla
     for car in all_sprites:
         if car.rect.left < 0:
             car.rect.left = 0
@@ -105,11 +117,11 @@ while running:
             car.rect.bottom = 600
 
     # Dibujar todo
-    screen.fill(BLACK)
-    pygame.draw.rect(screen, WHITE, exit_rect)  # Dibujar la salida
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, BLACK, exit_rect)  # Dibujar la salida
     all_sprites.draw(screen)
 
-    # Dibujar un borde alrededor del auto seleccionado
+    # Dibujar un borde alrededor del carro seleccionado
     if selected_car:
         pygame.draw.rect(screen, YELLOW, selected_car.rect, 3)
 

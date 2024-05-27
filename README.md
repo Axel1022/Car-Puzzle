@@ -19,6 +19,7 @@ Car Park Puzzle es un juego simple desarrollado en Python utilizando la bibliote
 
     ```
     pip install pygame
+    pip install pygame_menu
     ```
 
 ## Uso

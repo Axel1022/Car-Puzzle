@@ -2,6 +2,7 @@ import pygame
 import pygame_menu
 import sys
 import time
+from music import MusicPlayer
 
 import pygame_menu.widgets
 
@@ -23,7 +24,10 @@ GRAY = (128, 128, 128)
 red_car = None
 green_cars = []
 
-# Clase para los autos
+# Inicializar el reproductor de música
+music_player = MusicPlayer()
+
+# Clase para los carros
 class Car(pygame.sprite.Sprite):
     def __init__(self, color, width, height, x, y, direction):
         super().__init__()
@@ -38,21 +42,21 @@ class Car(pygame.sprite.Sprite):
         self.rect.x += x_change
         self.rect.y += y_change
 
-def set_dificultad(value,dificultad):
-    global red_car,green_cars
+def set_dificultad(value, dificultad):
+    global red_car, green_cars
     if dificultad == 1:
-        # Crear autos
+        # Crear autos para dificultad 1
         red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
         green_cars = [
-        Car(GREEN, 60, 120, 100, 100, 'vertical'),
-        Car(GREEN, 120, 60, 300, 100, 'horizontal'),
-        Car(GREEN, 120, 60, 300, 500, 'horizontal'),
-        Car(GREEN, 60, 120, 350, 300, 'vertical'),
-        Car(GREEN, 60, 120, 500, 250, 'vertical'),
+            Car(GREEN, 60, 120, 100, 100, 'vertical'),
+            Car(GREEN, 120, 60, 300, 100, 'horizontal'),
+            Car(GREEN, 120, 60, 300, 500, 'horizontal'),
+            Car(GREEN, 60, 120, 350, 300, 'vertical'),
+            Car(GREEN, 60, 120, 500, 250, 'vertical'),
         ]
 
-    if dificultad == 2:
-    # Nivel 2:
+    elif dificultad == 2:
+        # Crear autos para dificultad 2
         red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
         green_cars = [
             Car(GREEN, 60, 120, 200, 40, 'vertical'),
@@ -61,18 +65,24 @@ def set_dificultad(value,dificultad):
             Car(GREEN, 120, 60, 300, 450, 'horizontal'),
             Car(GREEN, 60, 120, 350, 300, 'vertical'),
             Car(GREEN, 60, 120, 500, 250, 'vertical'),
-        ]    
-    pass
+        ]
 
-
+    elif dificultad == 3:
+        # Crear autos para dificultad 3
+        red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
+        green_cars = [
+            Car(GREEN, 120, 60, 100, 100, 'horizontal'),
+            Car(GREEN, 60, 120, 300, 50, 'vertical'),
+            Car(GREEN, 120, 60, 300, 400, 'horizontal'),
+            Car(GREEN, 120, 60, 500, 150, 'horizontal'),
+            Car(GREEN, 60, 120, 320, 270, 'vertical'),
+            Car(GREEN, 60, 120, 500, 250, 'vertical'),
+        ]
 
 def start_the_game():
-    global red_car,green_cars
-    # Crear la salida
+    global red_car, green_cars
+    # Crear la salida y definir las paredes
     exit_rect = pygame.Rect(740, 300, 65, 60)
-
-
-# Definir las paredes
     walls = [
         pygame.Rect(0, 0, 800, 10),  # Pared superior
         pygame.Rect(0, 10, 10, 600),  # Pared izquierda
@@ -85,7 +95,7 @@ def start_the_game():
     all_sprites.add(red_car)
     all_sprites.add(*green_cars)
 
-    # Mensaje de victoria:
+    # Mensaje de victoria
     font = pygame.font.Font(None,53)
     win_text = font.render("¡Has llegado a la salida!",True,WHITE)
     size = win_text.get_rect(center=(400, 300))
@@ -93,7 +103,6 @@ def start_the_game():
     # Auto seleccionado
     selected_car = red_car
 
-    # Bucle principal
     # Bucle principal
     running = True
     while running:
@@ -108,8 +117,15 @@ def start_the_game():
                         selected_car = car
                         break
 
-        # Movimiento del auto seleccionado
+        # Movimiento del carro seleccionado y control del volumen
         keys = pygame.key.get_pressed()
+        if keys[pygame.K_KP2]: # Bajar volumen
+            music_player.vol_Down()
+        if keys[pygame.K_KP8]: # Subir volumen
+            music_player.vol_Up()
+        if keys[pygame.K_KP5]: # Mute y unmute
+            music_player.muteORdemue()
+
         if selected_car:
             x_change = 0
             y_change = 0
@@ -140,7 +156,6 @@ def start_the_game():
 
         # Asegurar que los autos no salgan de la pantalla
         for car in all_sprites:
-            
             if car.rect.left < 10:
                 car.rect.left = 10
             if car.rect.right > 790:
@@ -152,10 +167,8 @@ def start_the_game():
 
         # Dibujar todo
         screen.fill(BLACK)
-
         for wall in walls:
             pygame.draw.rect(screen, GRAY, wall)  # Dibujar las paredes
-        
         pygame.draw.rect(screen, WHITE, exit_rect)  # Dibujar la salida
         all_sprites.draw(screen)
 
@@ -164,27 +177,28 @@ def start_the_game():
             pygame.draw.rect(screen, YELLOW, selected_car.rect, 3)
 
 
-           
+
         pygame.display.flip()
- 
+
     pygame.quit()
     sys.exit()
 
 
 # Apariencia del menu:
 apariencia = pygame_menu.Theme(
-    background_color=(0, 0, 128), 
-    title_background_color=(0, 0, 0), 
+    background_color=(0, 0, 128),
+    title_background_color=(0, 0, 0),
     title_font_shadow=True,
     title_font=pygame_menu.font.FONT_BEBAS,
     widget_font=pygame_menu.font.FONT_FRANCHISE,
-    widget_font_color=(255, 255, 255),  
+    widget_font_color=(255, 255, 255),
     widget_margin=(0, 30),
     selection_color=(255,165,0)
 )
 
-menu = pygame_menu.Menu('Car Puzzle',800, 600, theme=apariencia)
-menu.add.dropselect('Difficulty :', [('Nivel 1', 1), ('Nivel 2', 2)], onchange=set_dificultad)
+# Crear el menú y agregar las opciones de dificultad
+menu = pygame_menu.Menu('Car Puzzle', 800, 600, theme=apariencia)
+menu.add.dropselect('Difficulty :', [('Nivel 1', 1), ('Nivel 2', 2), ('Nivel 3', 3)], onchange=set_dificultad)
 menu.add.button('Play', start_the_game)
 menu.add.button('Quit', pygame_menu.events.EXIT)
 

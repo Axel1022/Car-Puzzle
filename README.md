@@ -1,8 +1,4 @@
-Por supuesto, aquí está el README actualizado con los enlaces a LinkedIn de cada integrante:
-
----
-
-# Car Park Puzzle
+# 🚗 Car Park Puzzle
 
 Car Park Puzzle es un juego simple desarrollado en Python utilizando la biblioteca Pygame. El objetivo del juego es mover un automóvil rojo hacia la salida del estacionamiento, evitando las colisiones con otros autos verdes.
 
@@ -39,7 +35,7 @@ Car Park Puzzle es un juego simple desarrollado en Python utilizando la bibliote
     python car_park_puzzle.py
     ```
 
-3. Juega usando las teclas direccionales para mover el automóvil seleccionado. Presiona las teclas de dirección izquierda/derecha para mover el automóvil horizontalmente y arriba/abajo para moverlo verticalmente. Selecciona un automóvil haciendo clic sobre él con el ratón.
+3. 🎮 Juega usando las teclas direccionales para mover el automóvil seleccionado. Presiona las teclas de dirección izquierda/derecha para mover el automóvil horizontalmente y arriba/abajo para moverlo verticalmente. Selecciona un automóvil haciendo clic sobre él con el ratón.
 
 4. Controla el volumen de la música de fondo usando las teclas numéricas del teclado numérico:
    - **Tecla 8 del teclado numérico:** Aumenta el volumen.
@@ -59,10 +55,10 @@ Si quieres contribuir a este proyecto, sigue estos pasos:
 ## Créditos
 
 - Desarrollado por:
-  - [Gary Alexander Campusano Paredes](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/)
-  - [Joseph Herrera Nina](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/)
-  - [Otro integrante](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/)
-  - [Otro integrante](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/)
+  - [Gary Alexander Campusano Paredes](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/) 🧑‍💻
+  - [Joseph Herrera Nina](https://www.linkedin.com/in/joseph-undefined-8a0033310) 🧑‍💻
+  - [Iuribel Brawly Gomez De La Rosa](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/) 🧑‍💻
+  - [Arbin Oscar Tejada Mercedes](https://www.linkedin.com/in/arbin-tejada-509030310/) 🧑‍💻
 
 ## Licencia
 

@@ -57,7 +57,7 @@ Si quieres contribuir a este proyecto, sigue estos pasos:
 - Desarrollado por:
   - [Gary Alexander Campusano Paredes](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/) 🧑‍💻
   - [Joseph Herrera Nina](https://www.linkedin.com/in/joseph-undefined-8a0033310) 🧑‍💻
-  - [Iuribel Brawly Gomez De La Rosa](https://www.linkedin.com/in/gary-alexander-campusano-paredes-87a28724a/) 🧑‍💻
+  - [Iuribel Brawly Gomez De La Rosa](www.linkedin.com/in/iuribel-brawly-gomez-de-la-rosa-b443662a1) 🧑‍💻
   - [Arbin Oscar Tejada Mercedes](https://www.linkedin.com/in/arbin-tejada-509030310/) 🧑‍💻
 
 ## Licencia

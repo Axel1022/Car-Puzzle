@@ -18,7 +18,7 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
-YELLOW = (255, 255, 0)  # Color para el borde del auto seleccionado
+YELLOW = (255, 255, 0)  # Color para el borde del carro seleccionado
 GRAY = (128, 128, 128)
 
 red_car = None
@@ -45,7 +45,7 @@ class Car(pygame.sprite.Sprite):
 def set_dificultad(value, dificultad):
     global red_car, green_cars
     if dificultad == 1:
-        # Crear autos para dificultad 1
+        # Crear carros para dificultad 1
         red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
         green_cars = [
             Car(GREEN, 60, 120, 100, 100, 'vertical'),
@@ -56,7 +56,7 @@ def set_dificultad(value, dificultad):
         ]
 
     elif dificultad == 2:
-        # Crear autos para dificultad 2
+        # Crear carros para dificultad 2
         red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
         green_cars = [
             Car(GREEN, 60, 120, 200, 40, 'vertical'),
@@ -68,7 +68,7 @@ def set_dificultad(value, dificultad):
         ]
 
     elif dificultad == 3:
-        # Crear autos para dificultad 3
+        # Crear carros para dificultad 3
         red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
         green_cars = [
             Car(GREEN, 120, 60, 100, 100, 'horizontal'),
@@ -100,7 +100,7 @@ def start_the_game():
     win_text = font.render("¡Has llegado a la salida!",True,WHITE)
     size = win_text.get_rect(center=(400, 300))
 
-    # Auto seleccionado
+    # carro seleccionado
     selected_car = red_car
 
     # Bucle principal
@@ -110,7 +110,7 @@ def start_the_game():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Seleccionar un auto
+                # Seleccionar un carro
                 pos = pygame.mouse.get_pos()
                 for car in all_sprites:
                     if car.rect.collidepoint(pos):
@@ -140,7 +140,7 @@ def start_the_game():
                 if keys[pygame.K_DOWN]:
                     y_change = 1
 
-            # Mover el auto y verificar colisiones
+            # Mover el carro y verificar colisiones
             if x_change != 0 or y_change != 0:
                 selected_car.move(x_change, y_change)
                 collision = pygame.sprite.spritecollideany(selected_car, all_sprites, collided=lambda x, y: x != y and pygame.sprite.collide_rect(x, y))
@@ -154,7 +154,7 @@ def start_the_game():
             time.sleep(2)
             running = False
 
-        # Asegurar que los autos no salgan de la pantalla
+        # Asegurar que los carros no salgan de la pantalla
         for car in all_sprites:
             if car.rect.left < 10:
                 car.rect.left = 10
@@ -172,7 +172,7 @@ def start_the_game():
         pygame.draw.rect(screen, WHITE, exit_rect)  # Dibujar la salida
         all_sprites.draw(screen)
 
-        # Dibujar un borde alrededor del auto seleccionado
+        # Dibujar un borde alrededor del carro seleccionado
         if selected_car:
             pygame.draw.rect(screen, YELLOW, selected_car.rect, 3)
 

@@ -11,15 +11,15 @@ class MusicPlayer(object):
 
     def set_volume(self, volume):
         # Asegurarse de que el volumen esté en el rango de 0.0 a 1.0
-        volume = max(0.0, min(1.0, volume))
-        pygame.mixer.music.set_volume(volume)
+        #volume = max(0.0, min(1.0, volume))
+        pygame.mixer.music.set_volume(self.current_volume)
 
     def vol_Up(self):
         self.current_volume = 1.0
         self.set_volume(self.current_volume)
 
     def vol_Down(self):
-        self.current_volume = 0.3
+        self.current_volume = 0.1
         self.set_volume(self.current_volume)
 
     def muteORdemue(self):

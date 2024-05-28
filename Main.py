@@ -43,7 +43,10 @@ class Car(pygame.sprite.Sprite):
         self.rect.y += y_change
 
 def set_dificultad(value, dificultad):
-    global red_car, green_cars
+    global red_car, green_cars,dificultad_actual
+
+    dificultad_actual = dificultad
+
     if dificultad == 1:
         # Crear carros para dificultad 1
         red_car = Car(RED, 120, 60, 200, 300, 'horizontal')
@@ -81,6 +84,9 @@ def set_dificultad(value, dificultad):
 
 def start_the_game():
     global red_car, green_cars
+
+    set_dificultad(None, dificultad_actual)
+
     # Crear la salida y definir las paredes
     exit_rect = pygame.Rect(740, 300, 65, 60)
     walls = [
@@ -152,6 +158,8 @@ def start_the_game():
             screen.blit(win_text, size)
             pygame.display.flip()
             time.sleep(2)
+            # screen.fill(BLACK)
+            # pygame.display.flip()
             running = False
 
         # Asegurar que los carros no salgan de la pantalla
@@ -176,13 +184,7 @@ def start_the_game():
         if selected_car:
             pygame.draw.rect(screen, YELLOW, selected_car.rect, 3)
 
-
-
         pygame.display.flip()
-
-    pygame.quit()
-    sys.exit()
-
 
 # Apariencia del menu:
 apariencia = pygame_menu.Theme(
